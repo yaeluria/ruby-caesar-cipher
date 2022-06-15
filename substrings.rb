@@ -1,8 +1,10 @@
-def substrings(string, dictionary)
-    count_hash = {}
-    dictionary.map {|substring| count_hash[substring] = string.downcase.scan(/#{substring.downcase}/).count }
-    count_hash
+def substrings(string, substrings)
+  string.downcase!
+  substrings.each_with_object({}) do |substring, occurrences_count_by_substring|
+    substring_occurrences = string.scan(/#{substring.downcase}/).length
+    substring_occurrences.positive? && occurrences_count_by_substring[substring] = substring_occurrences
+  end
 end
 
-# dictionary = ["below","down","go","going","horn","how","howdy","it","i","low","own","part","partner","sit"]
-# p substrings("Howdy partner, sit down! How's it going?", dictionary)
+# substrings = %w[below down go going horn how howdy it i low own part partner sit]
+# p substrings("Howdy partner, sit down! How's it going?", substrings)
