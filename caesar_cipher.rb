@@ -20,9 +20,5 @@ def caesar_cipher_char(char, shift_num)
 end
 
 def caesar_cipher(string, shift_num)
-  chars_array = string.chars
-  ciphered_array = chars_array.map do |char|
-    caesar_cipher_char(char, shift_num)
-  end
-  ciphered_array.join
+  string.chars.map { |char| caesar_cipher_char(char, shift_num) }.join
 end
