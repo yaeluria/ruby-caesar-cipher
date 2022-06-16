@@ -1,8 +1,8 @@
 def substrings(string, substrings)
   string.downcase!
-  substrings.each_with_object({}) do |substring, occurrences_count_by_substring|
-    substring_occurrences = string.scan(/#{substring.downcase}/).length
-    substring_occurrences.positive? && occurrences_count_by_substring[substring] = substring_occurrences
+  substrings.map(&:downcase).each_with_object({}) do |substring, occurrences_count_by_substring|
+    substring_occurrences = string.scan(/#{substring}/).length
+    occurrences_count_by_substring[substring] = substring_occurrences if substring_occurrences.positive?
   end
 end
 
