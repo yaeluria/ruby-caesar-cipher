@@ -1,7 +1,6 @@
 def stock_picker(prices_array)
-  highest_profit = 0
-  highest_profit_interval = [0, 0]
-  return [0, prices_array.index(prices_array[1..].max)] if prices_array.max == prices_array[0]
+  highest_profit = -10**6
+  highest_profit_interval = []
 
   prices_array.each_with_index do |buying_price, buy_day_index|
     break if buy_day_index == prices_array.size - 1
@@ -18,7 +17,36 @@ def stock_picker(prices_array)
   highest_profit_interval
 end
 
-# array = [6, 8, 17, 15, 7, 6, 3, 9, 10, 15, 1]
+def stock_picker_combination(prices_array)
+  (0..prices_array.length - 1).to_a.combination(2).max_by do |pair|
+    (prices_array[pair[1]]) - (prices_array[pair[0]])
+  end
+end
+
+def stock_picker_with_min(prices_array)
+  min = 10**6
+  highest_profit = -10**6
+  highest_interval = []
+  min_index = 0
+  prices_array.each_with_index do |price, price_index|
+    if price < min
+      min = price
+      min_index = price_index
+    end
+    profit = price - min
+    next unless profit > highest_profit
+
+    highest_profit = profit
+    highest_interval = [min_index, price_index]
+  end
+
+  highest_interval
+end
+
 # array with highest price on the first day
-# array = [3, 2, 0]
-# p array, stock_picker(array)
+# array = [14, 6, 2, 1]
+
+# p array
+# p 'two loops', stock_picker(array)
+# p 'with combination', stock_picker_combination(array)
+# p 'with min', stock_picker_with_min(array)
