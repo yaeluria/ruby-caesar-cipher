@@ -10,31 +10,12 @@ end
 class Board
   attr_accessor :tiles
 
-  def initialize(player1, player2, tiles = default_tiles)
+  def initialize(tiles = default_tiles)
     @tiles = tiles
-    @player1 = player1
-    @player2 = player2
   end
 
   def move_possible?
     @tiles.value?(nil)
-  end
-
-  def winner
-    return if winning_symbol.empty?
-
-    if @player1.symbol == winning_symbol[0]
-      @player1.name
-    else
-      @player2.name
-    end
-  end
-
-  private
-
-  def default_tiles
-    tile_keys = %w[a1 b1 c1 a2 b2 c2 a3 b3 c3]
-    Hash[tile_keys.map { |key| [key, nil] }]
   end
 
   def winning_symbol
@@ -44,6 +25,13 @@ class Board
 
       win?(tiles_by_symbol)
     end
+  end
+
+  private
+
+  def default_tiles
+    tile_keys = %w[a1 b1 c1 a2 b2 c2 a3 b3 c3]
+    Hash[tile_keys.map { |key| [key, nil] }]
   end
 
   def win_axial?(win_chars, chars_to_check)
@@ -74,22 +62,27 @@ class TicTacToeGame
     # tiles = {"a1"=>"x", "b1"=>"o", "c1"=>"o", "a2"=>"o", "b2"=>"x", "c2"=>"x", "a3"=>"x", "b3"=>nil, "c3"=>nil}
 
     @current_player ||= @player1
-    @board = Board.new(@player1, @player2)
-    # @board = Board.new(@player1, @player2, tiles)
+    @board = Board.new
+  end
+
+  def winner
+    return if @board.winning_symbol.empty?
+
+    if @player1.symbol == @board.winning_symbol[0]
+      @player1.name
+    else
+      @player2.name
+    end
   end
 
   def play_game
-    while !@board.winner && @board.move_possible?
-      p @board.tiles
+    while !winner && @board.move_possible?
+      @board.tiles.values.each_slice(3).to_a.each { |row| puts row.to_s }
       if move
         @current_player = @current_player == @player1 ? @player2 : @player1
       end
     end
-    unless @board.winner
-      p "it's a tie"
-      return
-    end
-    p "#{@board.winner} is the winner"
+    p winner ? "#{winner} is the winner" : "it's a tie"
   end
 
   private
