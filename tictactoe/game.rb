@@ -7,8 +7,8 @@ class TicTacToeGame
     @player1 = Player.new(gets.chomp, 'x')
     p "what's your name, player 2?"
     @player2 = Player.new(gets.chomp, 'o')
-    # tiles = {"a1"=>"x", "b1"=>"o", "c1"=>"o", "a2"=>"o", "b2"=>"x", "c2"=>"x", "a3"=>"x", "b3"=>nil, "c3"=>nil}
-
+    # tiles = { 'a1' => nil, 'a2' => 'o', 'a3' => 'x', 'b1' => 'o', 'b2' => 'x', 'b3' => 'x', 'c1' => nil, 'c2' => nil,
+    #           'c3' => 'o' }
     @current_player ||= @player1
     @board = Board.new
   end
@@ -25,8 +25,10 @@ class TicTacToeGame
 
   def play_game
     while !winner && @board.move_possible?
-      @board.tiles.values.each_slice(3).to_a.each { |row| puts row.to_s }
+      p @board.tiles
+      @board.visualize
       if move
+        @board.visualize
         @current_player = @current_player == @player1 ? @player2 : @player1
       end
     end
